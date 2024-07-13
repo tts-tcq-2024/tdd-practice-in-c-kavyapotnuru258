@@ -5,9 +5,6 @@ int add(const char* numbers);
 
 #endif // STRING_CALCULATOR_H
 #include "StringCalculator.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 // Function to convert an integer to a string
 void int_to_str(int num, char* str) {
