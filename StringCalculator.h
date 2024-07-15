@@ -18,7 +18,7 @@ static char* getDelimiter(char** input) {
         char* end = strchr(*input + 2, '\n');
         if (end) {
             *end = '\0';
-            return strndup(*input + 2, end - (*input + 2));
+            return strndup(*input + 2, end - (*input + 2)); // Correctly use strndup
         }
     }
     return strdup(","); // Default delimiter
@@ -55,7 +55,7 @@ static int add(const char* input) {
 
     char* str = strdup(input);
     char* input_copy = strdup(input);
-    const char* delimiter = getDelimiter(&input_copy);
+    char* delimiter = getDelimiter(&input_copy);
     
     int result = processInput(str, delimiter);
 
