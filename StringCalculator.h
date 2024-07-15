@@ -28,13 +28,16 @@ static char* getDelimiter(char** input) {
 }
 
 // Function to sum numbers in a string using the provided delimiter
-static int sumNumbers(char* str, const char* delimiter) {
+static int sumNumbers(char* str, const char* delimiter, char* negatives) {
     int sum = 0;
     char* token = strtok(str, delimiter);
 
     while (token) {
         int num = parseNumber(token);
-        if (!shouldIgnore(num)) {
+        if (num < 0) {
+            strcat(negatives, token);
+            strcat(negatives, ",");
+        } else if (!shouldIgnore(num)) {
             sum += num;
         }
         token = strtok(NULL, delimiter);
@@ -43,12 +46,12 @@ static int sumNumbers(char* str, const char* delimiter) {
 }
 
 // Function to process input lines and calculate the total sum
-static int processInput(char* str, const char* delimiter) {
+static int processInput(char* str, const char* delimiter, char* negatives) {
     int sum = 0;
     char* line = strtok(str, "\n");
 
     while (line) {
-        sum += sumNumbers(line, delimiter);
+        sum += sumNumbers(line, delimiter, negatives);
         line = strtok(NULL, "\n");
     }
 
@@ -58,14 +61,6 @@ static int processInput(char* str, const char* delimiter) {
 // Function to validate input
 static int isInputValid(const char* input) {
     return input && strlen(input) > 0;
-}
-
-// Function to handle negative numbers
-static void handleNegatives(int num, char* negatives) {
-    if (num < 0) {
-        strcat(negatives, (char[]) {num + '0', '\0'});
-        strcat(negatives, ",");
-    }
 }
 
 // Main add function to calculate the sum
@@ -86,7 +81,7 @@ static int add(const char* input) {
         }
     }
 
-    int sum = processInput(str, delimiter);
+    int sum = processInput(str, delimiter, negatives);
 
     // Check for negatives
     if (strlen(negatives) > 0) {
