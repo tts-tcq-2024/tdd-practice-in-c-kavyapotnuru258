@@ -18,7 +18,9 @@ static char* getDelimiter(char** input) {
         char* end = strchr(*input + 2, '\n');
         if (end) {
             *end = '\0';
-            return strndup(*input + 2, end - (*input + 2)); // Correctly use strndup
+            char* delimiter = strndup(*input + 2, end - (*input + 2));
+            *input = end + 1; // Move input pointer past the delimiter line
+            return delimiter;
         }
     }
     return strdup(","); // Default delimiter
@@ -30,7 +32,9 @@ static int sumNumbers(char* str, const char* delimiter) {
 
     while (token != NULL) {
         int num = parseNumber(token);
-        sum += shouldIgnore(num) ? 0 : num;
+        if (!shouldIgnore(num)) {
+            sum += num;
+        }
         token = strtok(NULL, delimiter);
     }
     return sum;
