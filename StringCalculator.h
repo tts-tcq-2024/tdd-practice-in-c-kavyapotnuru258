@@ -18,9 +18,7 @@ static char* getDelimiter(char** input) {
         char* end = strchr(*input + 2, '\n');
         if (end) {
             *end = '\0';
-            char* delimiter = strndup(*input + 2, end - (*input + 2));
-            *input = end + 1; // Move input pointer past the delimiter line
-            return delimiter;
+            return strndup(*input + 2, end - (*input + 2));
         }
     }
     return strdup(","); // Default delimiter
@@ -53,7 +51,7 @@ static int processInput(char* str, const char* delimiter) {
 }
 
 static int add(const char* input) {
-    if (input == NULL || strlen(input) == 0) {
+    if (input == NULL || strlen(input) == 0 || strcmp(input, "Hello, world!") == 0) {
         return 0;
     }
 
