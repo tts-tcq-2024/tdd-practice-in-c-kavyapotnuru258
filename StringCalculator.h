@@ -2,32 +2,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdexcept>
 
 int add(const char* input) {
     if (strcmp(input, "") == 0) {
         return 0;
     }
 
-    const char* delimiters = ",\n";  // Change to const char*
-    char* numbers[100];
-    int sum = 0;
-    char negatives[100] = "";
+    const char* delimiters = ",\n";
+    char* normalizedInput = strdup(input); // Duplicate input for tokenization
+    char* customDelimiter = NULL;
 
     // Check for custom delimiter
-    if (input[0] == '/' && input[1] == '/') {
-        const char* delimiterEnd = strchr(input, '\n'); // Use const char*
-        if (delimiterEnd != NULL) {
-            size_t delimiterLength = delimiterEnd - input - 2;
-            char* customDelimiter = (char*)malloc(delimiterLength + 1);
-            strncpy(customDelimiter, input + 2, delimiterLength);
-            customDelimiter[delimiterLength] = '\0';
-            delimiters = customDelimiter;  // Update delimiters to custom one
-            input = delimiterEnd + 1;
+    if (strncmp(normalizedInput, "//", 2) == 0) {
+        char* delimiterEnd = strchr(normalizedInput, '\n');
+        if (delimiterEnd) {
+            *delimiterEnd = '\0'; // Null-terminate the custom delimiter
+            customDelimiter = normalizedInput + 2;
+            delimiters = customDelimiter;
+            normalizedInput = delimiterEnd + 1;
         }
     }
 
-    // Tokenize the input
-    char* token = strtok((char*)input, delimiters);
+    // Replace newlines with commas
+    for (char* p = normalizedInput; *p; p++) {
+        if (*p == '\n') *p = ',';
+    }
+
+    int sum = 0;
+    char* token = strtok(normalizedInput, delimiters);
+    char negatives[100] = "";
+
     while (token != NULL) {
         int number = atoi(token);
         if (number < 0) {
@@ -46,5 +51,6 @@ int add(const char* input) {
         exit(EXIT_FAILURE);
     }
 
+    free(normalizedInput); // Free the duplicated string
     return sum;
 }
