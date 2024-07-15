@@ -14,7 +14,7 @@ static int shouldIgnore(int num) {
 }
 
 static char** getDelimiters(char** input) {
-    char** delimiters = malloc(2 * sizeof(char*));
+    char** delimiters = (char**)malloc(2 * sizeof(char*)); // Cast to char**
     delimiters[0] = strdup(","); // Default delimiter
     delimiters[1] = NULL;
 
@@ -34,7 +34,6 @@ static int sumNumbers(char* str, char** delimiters) {
     char* token = strtok(str, delimiters[0]);
     
     while (token != NULL) {
-        // Handle multiple delimiters (if needed)
         char* subtoken = strtok(token, "\n");
         while (subtoken != NULL) {
             int num = parseNumber(subtoken);
