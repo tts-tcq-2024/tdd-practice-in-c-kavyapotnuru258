@@ -70,10 +70,11 @@ static int add(const char* input) {
     char* input_copy = strdup(input);
     char* delimiter = getDelimiter(&input_copy);
 
-    // Replace newlines with the delimiter to ensure consistent parsing
-    char* newline = strchr(str, '\n');
-    if (newline) {
-        *newline = '\0'; // Temporarily replace the first newline
+    // Replace newline characters with the delimiter
+    for (char* p = str; *p; ++p) {
+        if (*p == '\n') {
+            *p = *delimiter;
+        }
     }
 
     int result = processInput(str, delimiter);
