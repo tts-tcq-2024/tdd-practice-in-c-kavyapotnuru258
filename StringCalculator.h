@@ -5,14 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Function to parse a number from a token
 static int parseNumber(const char* token) {
     return atoi(token);
 }
 
+// Function to check if a number should be ignored
 static int shouldIgnore(int num) {
     return num > 1000;
 }
 
+// Function to extract the delimiter from the input
 static char* getDelimiter(char** input) {
     if (strncmp(*input, "//", 2) == 0) {
         char* end = strchr(*input + 2, '\n');
@@ -24,6 +27,7 @@ static char* getDelimiter(char** input) {
     return strdup(","); // Default delimiter
 }
 
+// Function to sum numbers in a string using the provided delimiter
 static int sumNumbers(char* str, const char* delimiter) {
     int sum = 0;
     char* token = strtok(str, delimiter);
@@ -38,6 +42,7 @@ static int sumNumbers(char* str, const char* delimiter) {
     return sum;
 }
 
+// Function to process input lines and calculate the total sum
 static int processInput(char* str, const char* delimiter) {
     int sum = 0;
     char* line = strtok(str, "\n");
@@ -50,10 +55,12 @@ static int processInput(char* str, const char* delimiter) {
     return sum;
 }
 
+// Function to check if the input is valid
 static int isInputValid(const char* input) {
     return input && strlen(input) > 0 && strcmp(input, "Hello, world!") != 0;
 }
 
+// Main add function to calculate the sum
 static int add(const char* input) {
     if (!isInputValid(input)) {
         return 0;
@@ -62,6 +69,12 @@ static int add(const char* input) {
     char* str = strdup(input);
     char* input_copy = strdup(input);
     char* delimiter = getDelimiter(&input_copy);
+
+    // Replace newlines with the delimiter to ensure consistent parsing
+    char* newline = strchr(str, '\n');
+    if (newline) {
+        *newline = '\0'; // Temporarily replace the first newline
+    }
 
     int result = processInput(str, delimiter);
 
