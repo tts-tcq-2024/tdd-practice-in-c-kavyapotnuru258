@@ -12,7 +12,7 @@ void throw_exception_for_negatives(const int* negatives, int count) {
             strcat(message, buffer);
             if (i < count - 1) {
                 strcat(message, ", ");
-            }
+            } 
         }
         fprintf(stderr, "%s\n", message);
         exit(EXIT_FAILURE);
