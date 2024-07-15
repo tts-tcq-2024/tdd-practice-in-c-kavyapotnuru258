@@ -23,7 +23,7 @@ static char* getDelimiter(char** input) {
             return delimiter;
         }
     }
-    return strdup(",\n");
+    return strdup(","); // Default delimiter
 }
 
 static int sumNumbers(char* str, const char* delimiter) {
@@ -49,6 +49,7 @@ static int add(const char* input) {
     char* delimiter = getDelimiter(&input_copy);
     
     int result = sumNumbers(str, delimiter);
+    
     free(delimiter);
     free(str);
     free(input_copy);
