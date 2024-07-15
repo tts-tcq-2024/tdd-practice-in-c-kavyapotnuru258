@@ -75,7 +75,7 @@ TEST(StringCalculatorAddTests, ExpectSumWithLeadingTrailingNewlines) {
 // Test for large input
 TEST(StringCalculatorAddTests, LargeInput) {
     const char* input = "1,2,3,1000,1001,4\n5";
-    ASSERT_EQ(add(input), 15); // 1 + 2 + 3 + 1000 + 4 + 5 = 15
+    ASSERT_EQ(add(input), 1015); // 1 + 2 + 3 + 1000 + 4 + 5 = 15
 }
 
 // Test for ignoring numbers greater than 1000
