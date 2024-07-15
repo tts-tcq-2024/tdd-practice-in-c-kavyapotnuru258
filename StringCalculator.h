@@ -8,22 +8,25 @@ int add(const char* input) {
         return 0;
     }
 
-    char* delimiters = ",\n";
+    const char* delimiters = ",\n";  // Change to const char*
     char* numbers[100];
     int sum = 0;
     char negatives[100] = "";
 
+    // Check for custom delimiter
     if (input[0] == '/' && input[1] == '/') {
-        char* delimiterEnd = strchr(input, '\n');
+        const char* delimiterEnd = strchr(input, '\n'); // Use const char*
         if (delimiterEnd != NULL) {
             size_t delimiterLength = delimiterEnd - input - 2;
-            delimiters = (char*)malloc(delimiterLength + 2);
-            strncpy(delimiters, input + 2, delimiterLength);
-            delimiters[delimiterLength] = '\0';
+            char* customDelimiter = (char*)malloc(delimiterLength + 1);
+            strncpy(customDelimiter, input + 2, delimiterLength);
+            customDelimiter[delimiterLength] = '\0';
+            delimiters = customDelimiter;  // Update delimiters to custom one
             input = delimiterEnd + 1;
         }
     }
 
+    // Tokenize the input
     char* token = strtok((char*)input, delimiters);
     while (token != NULL) {
         int number = atoi(token);
