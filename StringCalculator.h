@@ -14,7 +14,7 @@ static int shouldIgnore(int num) {
 }
 
 static char** getDelimiters(char** input) {
-    char** delimiters = (char**)malloc(2 * sizeof(char*)); // Cast to char**
+    char** delimiters = (char**)malloc(2 * sizeof(char*));
     delimiters[0] = strdup(","); // Default delimiter
     delimiters[1] = NULL;
 
@@ -29,6 +29,11 @@ static char** getDelimiters(char** input) {
     return delimiters;
 }
 
+static int processToken(char* token) {
+    int num = parseNumber(token);
+    return shouldIgnore(num) ? 0 : num; // Return 0 if ignored
+}
+
 static int sumNumbers(char* str, char** delimiters) {
     int sum = 0;
     char* token = strtok(str, delimiters[0]);
@@ -36,10 +41,7 @@ static int sumNumbers(char* str, char** delimiters) {
     while (token != NULL) {
         char* subtoken = strtok(token, "\n");
         while (subtoken != NULL) {
-            int num = parseNumber(subtoken);
-            if (!shouldIgnore(num)) {
-                sum += num;
-            }
+            sum += processToken(subtoken);
             subtoken = strtok(NULL, "\n");
         }
         token = strtok(NULL, delimiters[0]);
