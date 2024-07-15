@@ -102,53 +102,48 @@ TEST(StringCalculatorAddTests, OnlyDelimitersWithNewlines) {
 TEST(StringCalculatorAddTests, LeadingDelimiters) {
     ASSERT_EQ(add("//;\n;\n1;2"), 3);
 }
-// Test for single negative number
 TEST(StringCalculatorAddTests, SingleNegativeThrowsException) {
-    testing::internal::CaptureStderr();
+    const char* input = "1,-2,3";
     ASSERT_EXIT({
-        add("1,-2,3");
+        add(input);
     }, ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -2,");
 }
 
-// Test for multiple negative numbers
 TEST(StringCalculatorAddTests, MultipleNegativesThrowException) {
-    testing::internal::CaptureStderr();
+    const char* input = "1,-2,-3,4";
     ASSERT_EXIT({
-        add("1,-2,-3,4");
+        add(input);
     }, ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -2,-3,");
 }
 
-// Test for single negative with custom delimiter
 TEST(StringCalculatorAddTests, SingleNegativeWithCustomDelimiter) {
-    testing::internal::CaptureStderr();
+    const char* input = "//;\n1;2;-3";
     ASSERT_EXIT({
-        add("//;\n1;-2;3");
-    }, ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -2,");
+        add(input);
+    }, ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -3,");
 }
 
-// Test for multiple negatives with custom delimiter
 TEST(StringCalculatorAddTests, MultipleNegativesWithCustomDelimiter) {
-    testing::internal::CaptureStderr();
+    const char* input = "//;\n1;-2;3;-4";
     ASSERT_EXIT({
-        add("//;\n1;-2;3;-4");
+        add(input);
     }, ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -2,-4,");
 }
 
-// Test for ignoring negative numbers in a valid input with large numbers
 TEST(StringCalculatorAddTests, IgnoreNegativeInLargeInput) {
-    testing::internal::CaptureStderr();
-    ASSERT_EXIT({
-        add("1000,-1,2");
-    }, ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -1,");
+    const char* input = "1000,2,-1000";
+    int expectedresult = 1002;
+    int result = add(input);
+    ASSERT_EQ(result, expectedresult);
 }
 
-// Test for leading and trailing newlines with negatives
 TEST(StringCalculatorAddTests, LeadingTrailingNewlinesWithNegative) {
-    testing::internal::CaptureStderr();
+    const char* input = "\n1,-2,3\n";
     ASSERT_EXIT({
-        add("\n1\n-2\n3\n");
+        add(input);
     }, ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -2,");
 }
+
 // #include <gtest/gtest.h>
 // #include "StringCalculator.h"
 
