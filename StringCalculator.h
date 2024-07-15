@@ -13,7 +13,7 @@ static int shouldIgnore(int num) {
     return num > 1000;
 }
 
-static char* getDelimiter(const char** input) {
+static char* getDelimiter(char** input) {
     if (strncmp(*input, "//", 2) == 0) {
         char* end = strchr(*input + 2, '\n');
         if (end) {
@@ -45,12 +45,13 @@ static int add(const char* input) {
     }
 
     char* str = strdup(input);
-    const char* original_input = input;
-    char* delimiter = getDelimiter(&original_input);
+    char* input_copy = strdup(input);
+    char* delimiter = getDelimiter(&input_copy);
     
     int result = sumNumbers(str, delimiter);
     free(delimiter);
     free(str);
+    free(input_copy);
     
     return result;
 }
