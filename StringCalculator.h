@@ -28,7 +28,7 @@ static int sumNumbers(char* str, const char* delimiter) {
     int sum = 0;
     char* token = strtok(str, delimiter);
 
-    while (token != NULL) {
+    while (token) {
         int num = parseNumber(token);
         if (!shouldIgnore(num)) {
             sum += num;
@@ -42,7 +42,7 @@ static int processInput(char* str, const char* delimiter) {
     int sum = 0;
     char* line = strtok(str, "\n");
 
-    while (line != NULL) {
+    while (line) {
         sum += sumNumbers(line, delimiter);
         line = strtok(NULL, "\n");
     }
@@ -50,11 +50,12 @@ static int processInput(char* str, const char* delimiter) {
     return sum;
 }
 
+static int isInputValid(const char* input) {
+    return input && strlen(input) > 0 && strcmp(input, "Hello, world!") != 0;
+}
+
 static int add(const char* input) {
-    if (input == NULL || strlen(input) == 0) {
-        return 0;
-    }
-    if (strcmp(input, "Hello, world!") == 0) {
+    if (!isInputValid(input)) {
         return 0;
     }
 
