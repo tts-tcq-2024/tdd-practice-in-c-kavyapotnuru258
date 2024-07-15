@@ -1,56 +1,65 @@
-#include "StringCalculator.h"
+#ifndef STRING_CALCULATOR_H
+#define STRING_CALCULATOR_H
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
+#include <ctype.h>
 
-void throw_exception_for_negatives(const int* negatives, int count) {
-    if (count > 0) {
-        static char message[1024] = "negatives not allowed: ";
-        char buffer[32];
-        for (int i = 0; i < count; ++i) {
-            sprintf(buffer, "%d", negatives[i]);
-            strcat(message, buffer);
-            if (i < count - 1) {
-                strcat(message, ", ");
-            } 
-        }
-        fprintf(stderr, "%s\n", message);
-        exit(EXIT_FAILURE);
-    }
-}
+int add(const char* input);
 
-int add(const char* numbers) {
-    if (numbers[0] == '\0') {
+#endif // STRING_CALCULATOR_H
+#include "StringCalculator.h"
+
+int add(const char* input) {
+    if (strcmp(input, "") == 0) {
         return 0;
     }
 
-    int sum = 0;
-    int negatives[1024];
-    int negative_count = 0;
     char* delimiters = ",\n";
-    char* numbers_copy = strdup(numbers);
-    
-    if (numbers_copy[0] == '/' && numbers_copy[1] == '/') {
-        char* newline_pos = strchr(numbers_copy, '\n');
-        if (newline_pos != NULL) {
-            *newline_pos = '\0';
-            delimiters = numbers_copy + 2;
-            numbers_copy = newline_pos + 1;
+    char* numbers[100];
+    int count = 0;
+    int sum = 0;
+    int negativeCount = 0;
+    char negatives[100] = "";
+
+    // Check for custom delimiter
+    if (input[0] == '/' && input[1] == '/') {
+        char* delimiterEnd = strchr(input, '\n');
+        if (delimiterEnd != NULL) {
+            int delimiterLength = delimiterEnd - input - 2;
+            delimiters = (char*)malloc(delimiterLength + 2);
+            strncpy(delimiters, input + 2, delimiterLength);
+            delimiters[delimiterLength] = '\0';
+            delimiters[delimiterLength + 1] = '\0'; // Null-terminate the string
+            input = delimiterEnd + 1;
         }
     }
 
-    char* token = strtok(numbers_copy, delimiters);
+    // Tokenize the input using the defined delimiters
+    char* token = strtok((char*)input, delimiters);
     while (token != NULL) {
-        int num = atoi(token);
-        if (num < 0) {
-            negatives[negative_count++] = num;
-        } else if (num <= 1000) {
-            sum += num;
+        int number = atoi(token);
+        if (number < 0) {
+            negativeCount++;
+            if (strlen(negatives) > 0) {
+                strcat(negatives, ",");
+            }
+            strcat(negatives, token);
         }
+        if (number <= 1000) {
+            sum += number;
+        }
+        count++;
         token = strtok(NULL, delimiters);
     }
 
-    free(numbers_copy);
-    throw_exception_for_negatives(negatives, negative_count);
+    if (negativeCount > 0) {
+        char errorMessage[256];
+        snprintf(errorMessage, sizeof(errorMessage), "negatives not allowed: %s", negatives);
+        fprintf(stderr, "%s\n", errorMessage);
+        exit(EXIT_FAILURE);
+    }
+
     return sum;
 }
