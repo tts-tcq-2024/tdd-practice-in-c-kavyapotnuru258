@@ -45,10 +45,11 @@ static int add(const char* input) {
     }
 
     char* str = strdup(input);
-    const char* delimiter = getDelimiter(&input);
+    const char* original_input = input;
+    char* delimiter = getDelimiter(&original_input);
     
     int result = sumNumbers(str, delimiter);
-    free((char*)delimiter);
+    free(delimiter);
     free(str);
     
     return result;
