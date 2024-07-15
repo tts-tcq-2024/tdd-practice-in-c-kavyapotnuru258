@@ -41,7 +41,7 @@ static int sumNumbers(char* str, const char* delimiter) {
 static int processInput(char* str, const char* delimiter) {
     int sum = 0;
     char* line = strtok(str, "\n");
-    
+
     while (line != NULL) {
         sum += sumNumbers(line, delimiter);
         line = strtok(NULL, "\n");
@@ -51,14 +51,17 @@ static int processInput(char* str, const char* delimiter) {
 }
 
 static int add(const char* input) {
-    if (input == NULL || strlen(input) == 0 || strcmp(input, "Hello, world!") == 0) {
+    if (input == NULL || strlen(input) == 0) {
+        return 0;
+    }
+    if (strcmp(input, "Hello, world!") == 0) {
         return 0;
     }
 
     char* str = strdup(input);
     char* input_copy = strdup(input);
     char* delimiter = getDelimiter(&input_copy);
-    
+
     int result = processInput(str, delimiter);
 
     free(delimiter);
