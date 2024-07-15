@@ -13,28 +13,37 @@ static int shouldIgnore(int num) {
     return num > 1000;
 }
 
-static char* getDelimiter(char** input) {
+static char** getDelimiters(char** input) {
+    char** delimiters = malloc(2 * sizeof(char*));
+    delimiters[0] = strdup(","); // Default delimiter
+    delimiters[1] = NULL;
+
     if (strncmp(*input, "//", 2) == 0) {
         char* end = strchr(*input + 2, '\n');
         if (end) {
             *end = '\0';
-            char* delimiter = strndup(*input + 2, end - (*input + 2));
+            delimiters[0] = strndup(*input + 2, end - (*input + 2));
             *input = end + 1; // Skip to numbers
-            return delimiter;
         }
     }
-    return strdup(","); // Default delimiter
+    return delimiters;
 }
 
-static int sumNumbers(char* str, const char* delimiter) {
+static int sumNumbers(char* str, char** delimiters) {
     int sum = 0;
-    char* token = strtok(str, delimiter);
+    char* token = strtok(str, delimiters[0]);
+    
     while (token != NULL) {
-        int num = parseNumber(token);
-        if (!shouldIgnore(num)) {
-            sum += num;
+        // Handle multiple delimiters (if needed)
+        char* subtoken = strtok(token, "\n");
+        while (subtoken != NULL) {
+            int num = parseNumber(subtoken);
+            if (!shouldIgnore(num)) {
+                sum += num;
+            }
+            subtoken = strtok(NULL, "\n");
         }
-        token = strtok(NULL, delimiter);
+        token = strtok(NULL, delimiters[0]);
     }
     return sum;
 }
@@ -46,11 +55,12 @@ static int add(const char* input) {
 
     char* str = strdup(input);
     char* input_copy = strdup(input);
-    char* delimiter = getDelimiter(&input_copy);
+    char** delimiters = getDelimiters(&input_copy);
     
-    int result = sumNumbers(str, delimiter);
+    int result = sumNumbers(str, delimiters);
     
-    free(delimiter);
+    free(delimiters[0]);
+    free(delimiters);
     free(str);
     free(input_copy);
     
