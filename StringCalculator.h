@@ -18,12 +18,10 @@ static char* getDelimiter(char** input) {
         char* end = strchr(*input + 2, '\n');
         if (end) {
             *end = '\0';
-            char* delimiter = strndup(*input + 2, end - (*input + 2));
-            *input = end + 1; // Skip to numbers
-            return delimiter;
+            return strndup(*input + 2, end - (*input + 2));
         }
     }
-    return ","; // Default delimiter
+    return strdup(","); // Default delimiter
 }
 
 static int sumNumbers(char* str, const char* delimiter) {
@@ -32,11 +30,21 @@ static int sumNumbers(char* str, const char* delimiter) {
 
     while (token != NULL) {
         int num = parseNumber(token);
-        if (!shouldIgnore(num)) {
-            sum += num;
-        }
+        sum += shouldIgnore(num) ? 0 : num;
         token = strtok(NULL, delimiter);
     }
+    return sum;
+}
+
+static int processInput(char* str, const char* delimiter) {
+    int sum = 0;
+    char* line = strtok(str, "\n");
+    
+    while (line != NULL) {
+        sum += sumNumbers(line, delimiter);
+        line = strtok(NULL, "\n");
+    }
+
     return sum;
 }
 
@@ -47,21 +55,14 @@ static int add(const char* input) {
 
     char* str = strdup(input);
     char* input_copy = strdup(input);
-    char* delimiter = getDelimiter(&input_copy);
+    const char* delimiter = getDelimiter(&input_copy);
     
-    // Replace newline with the default delimiter to handle both
-    char* newline = strtok(str, "\n");
-    int result = 0;
-    
-    while (newline != NULL) {
-        result += sumNumbers(newline, delimiter);
-        newline = strtok(NULL, "\n");
-    }
+    int result = processInput(str, delimiter);
 
     free(delimiter);
     free(str);
     free(input_copy);
-    
+
     return result;
 }
 
