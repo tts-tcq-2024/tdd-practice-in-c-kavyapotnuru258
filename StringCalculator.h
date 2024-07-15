@@ -47,9 +47,20 @@ static int add(const char* input) {
 
     char* str = strdup(input);
     char* input_copy = strdup(input);
-    const char* delimiter = getDelimiter(&input_copy);
+    char* delimiter = getDelimiter(&input_copy);
     
-    int result = sumNumbers(str, delimiter);
+    // Replace newline with the default delimiter to handle both
+    char* newline = strtok(str, "\n");
+    int result = 0;
+    
+    while (newline != NULL) {
+        result += sumNumbers(newline, delimiter);
+        newline = strtok(NULL, "\n");
+    }
+
+    free(delimiter);
+    free(str);
+    free(input_copy);
     
     return result;
 }
