@@ -42,6 +42,36 @@ TEST(StringCalculatorAddTests, ExpectSumWithCustomDelimiter) {
     int result = add(input);
     ASSERT_EQ(result, expectedresult);
 }
+TEST(StringCalculatorAddTests, ExpectSumWithLongCustomDelimiter) {
+    int expectedresult = 6;
+    const char* input = "//[***]\n1***2***3";
+    int result = add(input);
+    ASSERT_EQ(result, expectedresult);
+}
+
+// Test for ignoring numbers greater than 1000 with custom delimiter
+TEST(StringCalculatorAddTests, IgnoreNumbersGreaterThan1000WithCustomDelimiter) {
+    int expectedresult = 6;
+    const char* input = "//;\n1;2;1001;3";
+    int result = add(input);
+    ASSERT_EQ(result, expectedresult);
+}
+
+// Test for input with only newlines
+TEST(StringCalculatorAddTests, SumWithOnlyNewlines) {
+    int expectedresult = 6;
+    const char* input = "1\n2\n3";
+    int result = add(input);
+    ASSERT_EQ(result, expectedresult);
+}
+
+// Test for leading and trailing newlines
+TEST(StringCalculatorAddTests, ExpectSumWithLeadingTrailingNewlines) {
+    int expectedresult = 6;
+    const char* input = "\n1\n2\n3\n";
+    int result = add(input);
+    ASSERT_EQ(result, expectedresult);
+}
 // #include <gtest/gtest.h>
 // #include "StringCalculator.h"
 
