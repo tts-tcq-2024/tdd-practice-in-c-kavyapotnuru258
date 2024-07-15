@@ -55,9 +55,17 @@ static int processInput(char* str, const char* delimiter) {
     return sum;
 }
 
-// Function to check if the input is valid
+// Function to validate input
 static int isInputValid(const char* input) {
-    return input && strlen(input) > 0 && strcmp(input, "Hello, world!") != 0;
+    return input && strlen(input) > 0;
+}
+
+// Function to handle negative numbers
+static void handleNegatives(int num, char* negatives) {
+    if (num < 0) {
+        strcat(negatives, (char[]) {num + '0', '\0'});
+        strcat(negatives, ",");
+    }
 }
 
 // Main add function to calculate the sum
@@ -69,6 +77,7 @@ static int add(const char* input) {
     char* str = strdup(input);
     char* input_copy = strdup(input);
     char* delimiter = getDelimiter(&input_copy);
+    char negatives[100] = "";
 
     // Replace newline characters with the delimiter
     for (char* p = str; *p; ++p) {
@@ -77,13 +86,20 @@ static int add(const char* input) {
         }
     }
 
-    int result = processInput(str, delimiter);
+    int sum = processInput(str, delimiter);
+
+    // Check for negatives
+    if (strlen(negatives) > 0) {
+        negatives[strlen(negatives) - 1] = '\0'; // Remove trailing comma
+        fprintf(stderr, "negatives not allowed: %s\n", negatives);
+        exit(EXIT_FAILURE);
+    }
 
     free(delimiter);
     free(str);
     free(input_copy);
 
-    return result;
+    return sum;
 }
 
 #endif // STRING_CALCULATOR_H
