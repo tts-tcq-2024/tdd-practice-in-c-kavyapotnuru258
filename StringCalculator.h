@@ -18,7 +18,7 @@ static char* getDelimiter(const char** input) {
         char* end = strchr(*input + 2, '\n');
         if (end) {
             *end = '\0';
-            char* delimiter = strdup(*input + 2);
+            char* delimiter = strndup(*input + 2, end - (*input + 2));
             *input = end + 1; // Skip to numbers
             return delimiter;
         }
@@ -45,10 +45,10 @@ static int add(const char* input) {
     }
 
     char* str = strdup(input);
-    char* delimiter = getDelimiter(&str);
+    const char* delimiter = getDelimiter(&input);
     
     int result = sumNumbers(str, delimiter);
-    free(delimiter);
+    free((char*)delimiter);
     free(str);
     
     return result;
