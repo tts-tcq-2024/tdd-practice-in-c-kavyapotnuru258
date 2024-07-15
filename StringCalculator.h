@@ -1,56 +1,44 @@
-#include "StringCalculator.h"
+#ifndef STRING_CALCULATOR_H
+#define STRING_CALCULATOR_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdexcept>
 
-int add(const char* input) {
-    if (strcmp(input, "") == 0) {
+static int add(const char* input) {
+    if (input == NULL || strlen(input) == 0) {
         return 0;
     }
 
-    const char* delimiters = ",\n";
-    char* normalizedInput = strdup(input); // Duplicate input for tokenization
-    char* customDelimiter = NULL;
+    char* str = strdup(input);
+    char* delimiter = ",";
+    int sum = 0;
+    int num;
 
     // Check for custom delimiter
-    if (strncmp(normalizedInput, "//", 2) == 0) {
-        char* delimiterEnd = strchr(normalizedInput, '\n');
-        if (delimiterEnd) {
-            *delimiterEnd = '\0'; // Null-terminate the custom delimiter
-            customDelimiter = normalizedInput + 2;
-            delimiters = customDelimiter;
-            normalizedInput = delimiterEnd + 1;
+    if (strncmp(str, "//", 2) == 0) {
+        char* end = strchr(str + 2, '\n');
+        if (end) {
+            *end = '\0';
+            delimiter = str + 2;  // Custom delimiter
+            str = end + 1;         // Skip to numbers
         }
     }
 
-    // Replace newlines with commas
-    for (char* p = normalizedInput; *p; p++) {
-        if (*p == '\n') *p = ',';
-    }
-
-    int sum = 0;
-    char* token = strtok(normalizedInput, delimiters);
-    char negatives[100] = "";
-
+    // Tokenize the input string
+    char* token = strtok(str, delimiter);
     while (token != NULL) {
-        int number = atoi(token);
-        if (number < 0) {
-            strcat(negatives, token);
-            strcat(negatives, ",");
+        num = atoi(token);
+        if (num > 1000) {
+            token = strtok(NULL, delimiter);
+            continue; // Ignore numbers greater than 1000
         }
-        if (number <= 1000) {
-            sum += number;
-        }
-        token = strtok(NULL, delimiters);
+        sum += num;
+        token = strtok(NULL, delimiter);
     }
 
-    if (strlen(negatives) > 0) {
-        negatives[strlen(negatives) - 1] = '\0'; // Remove trailing comma
-        fprintf(stderr, "negatives not allowed: %s\n", negatives);
-        exit(EXIT_FAILURE);
-    }
-
-    free(normalizedInput); // Free the duplicated string
+    free(str);
     return sum;
 }
+
+#endif // STRING_CALCULATOR_H
