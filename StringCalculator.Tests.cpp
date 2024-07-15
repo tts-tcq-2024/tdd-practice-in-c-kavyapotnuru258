@@ -102,6 +102,7 @@ TEST(StringCalculatorAddTests, OnlyDelimitersWithNewlines) {
 TEST(StringCalculatorAddTests, LeadingDelimiters) {
     ASSERT_EQ(add("//;\n;\n1;2"), 3);
 }
+// Test for single negative number
 TEST(StringCalculatorAddTests, SingleNegativeThrowsException) {
     testing::internal::CaptureStderr();
     ASSERT_EXIT({
