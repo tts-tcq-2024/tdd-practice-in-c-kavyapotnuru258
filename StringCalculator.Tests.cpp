@@ -72,6 +72,36 @@ TEST(StringCalculatorAddTests, ExpectSumWithLeadingTrailingNewlines) {
     int result = add(input);
     ASSERT_EQ(result, expectedresult);
 }
+// Test for large input
+TEST(StringCalculatorAddTests, LargeInput) {
+    const char* input = "1,2,3,1000,1001,4\n5";
+    ASSERT_EQ(add(input), 15); // 1 + 2 + 3 + 1000 + 4 + 5 = 15
+}
+
+// Test for ignoring numbers greater than 1000
+TEST(StringCalculatorAddTests, IgnoreMultipleNumbersGreaterThan1000) {
+    ASSERT_EQ(add("1001,1002,1003,1"), 1);
+}
+
+// Test for multiple delimiters
+TEST(StringCalculatorAddTests, MultipleDelimiters) {
+    ASSERT_EQ(add("//[;][%]\n1;2%3"), 6);
+}
+
+// Test for complex mixed delimiters
+TEST(StringCalculatorAddTests, ComplexMixedDelimiters) {
+    ASSERT_EQ(add("//[***][#]\n1***2#3"), 6);
+}
+
+// Test for input with only delimiters and no numbers
+TEST(StringCalculatorAddTests, OnlyDelimitersWithNewlines) {
+    ASSERT_EQ(add("//;\n\n"), 0);
+}
+
+// Test for input with leading delimiters
+TEST(StringCalculatorAddTests, LeadingDelimiters) {
+    ASSERT_EQ(add("//;\n;\n1;2"), 3);
+}
 // #include <gtest/gtest.h>
 // #include "StringCalculator.h"
 
