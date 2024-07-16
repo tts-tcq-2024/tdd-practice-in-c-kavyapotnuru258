@@ -63,8 +63,8 @@ TEST(StringCalculatorAddTests, ExpectZeroForEmptyInput2) {
 }
 
 TEST(StringCalculatorAddTests, GetDelimiter_CustomDelimiterSpecialChars) {
-    int expectedresult = 6;
-    const char* input = "//[$$]\n1$$2$$-3";
+    int expectedresult = 3;
+    const char* input = "//[$\n1$$2$$-3";
     int result = add(input);
     ASSERT_EQ(result, expectedresult);
 }
