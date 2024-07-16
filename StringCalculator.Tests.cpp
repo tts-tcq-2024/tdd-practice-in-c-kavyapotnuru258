@@ -49,6 +49,11 @@ TEST(StringCalculatorAddTests, ExpectSumWithLongCustomDelimiter) {
     ASSERT_EQ(result, expectedresult);
 }
 
+TEST(StringCalculatorAddTests, HandleNullInputGracefully) {
+    int expectedresult = 0;
+    int result = add(nullptr);
+    ASSERT_EQ(result, expectedresult);
+}
 
 
 
