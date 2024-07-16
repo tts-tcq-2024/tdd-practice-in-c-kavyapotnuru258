@@ -62,4 +62,11 @@ TEST(StringCalculatorAddTests, ExpectZeroForEmptyInput2) {
     ASSERT_EQ(result, expectedresult);
 }
 
-
+TEST(StringCalculatorTests, GetDelimiter_CustomDelimiterSpecialChars) {
+    const char* input = "//[$$]\n1$$2$$3";
+    char* input_copy = strdup(input);
+    char* delimiter = getDelimiter(&input_copy);
+    ASSERT_STREQ(delimiter, "$$");
+    free(delimiter);
+    free(input_copy);
+}
