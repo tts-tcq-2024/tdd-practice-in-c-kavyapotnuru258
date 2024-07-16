@@ -55,6 +55,11 @@ TEST(StringCalculatorAddTests, HandleNullInputGracefully) {
     ASSERT_EQ(result, expectedresult);
 }
 
-
+TEST(StringCalculatorAddTests, ExpectZeroForEmptyInput) {
+    int expectedresult = 0;
+    const char* input = "";
+    int result = add(input);
+    ASSERT_EQ(result, expectedresult);
+}
 
 
