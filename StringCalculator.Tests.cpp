@@ -69,7 +69,7 @@
 //     ASSERT_EQ(result, expectedresult);
 // }
 #include <gtest/gtest.h>
-#include "string_calculator.h"
+ #include "StringCalculator.h"
 
 // Test case for empty string input
 TEST(StringCalculatorTest, HandlesEmptyString) {
