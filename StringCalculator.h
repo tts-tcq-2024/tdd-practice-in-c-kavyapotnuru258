@@ -88,6 +88,8 @@ static void checkForNegatives(char* negatives) {
     }
 }
 
+
+
 // Main add function to calculate the sum
 static int add(const char* input) {
     if (!isInputValid(input)) {
