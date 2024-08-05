@@ -246,9 +246,10 @@ TEST(StringCalculatorTest, HandlesNoNegatives) {
 }
 
 // Additional test case for checkForNegatives with negatives
-// Additional test case for checkForNegatives with negatives
+
 TEST(StringCalculatorTest, ThrowsErrorWithNegativesCheck) {
     char negatives[] = "-1,-2";
+    // Capture the output and check for exit code
     ASSERT_EXIT(checkForNegatives(negatives), ::testing::ExitedWithCode(EXIT_FAILURE), "negatives not allowed: -1,-2");
 }
 
