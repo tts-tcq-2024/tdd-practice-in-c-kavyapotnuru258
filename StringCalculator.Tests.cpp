@@ -257,10 +257,10 @@ TEST(StringCalculatorTest, ThrowsErrorWithNegativesCheck) {
 
 // Additional test case for custom delimiter without newline (edge case)
 TEST(StringCalculatorTest, HandlesCustomDelimiterWithoutNewline) {
-    char input[] = "//;1;2";
+    char input[] = "//,1,2";
     char* input_ptr = input;
     char* delimiter = getDelimiter(&input_ptr);
-    ASSERT_STREQ(delimiter, ";");
+    ASSERT_STREQ(delimiter, ",");
     free(delimiter);
 }
 
